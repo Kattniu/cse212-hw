@@ -13,7 +13,19 @@ public static class Arrays
         // step by step before you write the code. The plan should be clear enough that it could
         // be implemented by another person.
 
-        return []; // replace this return statement with your own
+        // 1. I create an array of size 'length' to store the multiples
+        double[] result = new double[length];
+
+        // 2. I fill the array with multiples of the given number
+        //    - I use a loop from 0 to length - 1
+        //    - I calculate each element by multiplying the base number by (i + 1)
+        for (int i = 0; i < length; i++)
+        {
+            result[i] = number * (i + 1);
+        }
+
+        // 3. Return the array with all the multiples
+        return result;
     }
 
     /// <summary>
@@ -29,5 +41,14 @@ public static class Arrays
         // Remember: Using comments in your program, write down your process for solving this problem
         // step by step before you write the code. The plan should be clear enough that it could
         // be implemented by another person.
+
+        // 1️- I take the last "amount" elements
+        List<int> lastPart = data.GetRange(data.Count - amount, amount);
+
+        // 2️-  I remove them from the original list
+        data.RemoveRange(data.Count - amount, amount);
+
+        // 3️- I insert them at the start
+        data.InsertRange(0, lastPart);
     }
 }
