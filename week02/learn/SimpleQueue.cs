@@ -48,14 +48,27 @@
     }
 
     private readonly List<int> _queue = new();
+    //lista donde se guardan los elementos de la cola 
 
     /// <summary>
     /// Enqueue the value provided into the queue
     /// </summary>
     /// <param name="value">Integer value to add to the queue</param>
+    
+    ///Here is the implementation of the Enqueue method but it contains a defect.
+    ///
     private void Enqueue(int value) {
-        _queue.Insert(0, value);
+       _queue.Add(value);
+        //.Add appends the value to the end of the list, which is the correct behavior for a queue.
+       // esto significa : “Pon el número al final de la lista”
+
+
+       // _queue.Insert(0, value);
+        //esto dice: Pon el numero en la posicion 0 de la lista y esta mal !
+        //the problem with this line is that it inserts the new value at the beginning of the list,
     }
+//Pone el numero al inicio pero deberia ponerlo al final para que el primer numero en entrar sea el primero en salir.
+
 
     /// <summary>
     /// Dequeue the next value and return it
@@ -66,8 +79,10 @@
         if (_queue.Count <= 0)
             throw new IndexOutOfRangeException();
 
-        var value = _queue[1];
-        _queue.RemoveAt(1);
+///Here is  the error in the Dequeue method.
+///The problem is that it removes and returns the second element of the list instead of the first
+        var value = _queue[0];
+        _queue.RemoveAt(0);
         return value;
     }
 }
