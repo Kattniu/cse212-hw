@@ -33,16 +33,17 @@
      */
     private static void DisplaySumPairs(int[] numbers)
     {
-        var valuesSeen = new HashSet<int>();
+        var valuesSeen = new HashSet<int>(); //Conjunto vacío para guardar los números vistos
         foreach (var n in numbers)
         {
             // If 10-n is in the values_seen set then I know that
             // I have previously seen a number that will sum with n 
             // to equal 10. Print out that pair
-            if (valuesSeen.Contains(10 - n))
+            if (valuesSeen.Contains(10 - n)) // example: si n=6, 10-n=4
+            //pregunta: ¿ya vimos el 4?
                 Console.WriteLine($"{n} {10-n}");
             // Add this number to the values_seen set
-            valuesSeen.Add(n);
+            valuesSeen.Add(n); //después de la verificación, agregamos n al set
         }
     }
 }

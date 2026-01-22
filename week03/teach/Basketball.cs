@@ -19,14 +19,19 @@ public class Basketball
     {
         var players = new Dictionary<string, int>();
 
-        using var reader = new TextFieldParser("basketball.csv");
-        reader.TextFieldType = FieldType.Delimited;
-        reader.SetDelimiters(",");
-        reader.ReadFields(); // ignore header row
+        using var reader = new TextFieldParser("basketball.csv");//abre el archivo basketball.csv
+        reader.TextFieldType = FieldType.Delimited; //indica que los campos están delimitados
+        reader.SetDelimiters(","); //indica que el delimitador es la coma, indica separador entre columnas
+        reader.ReadFields(); // ignore header row, leer la primera fila (encabezados) y no hacer nada con ella (lo ignora)
         while (!reader.EndOfData) {
-            var fields = reader.ReadFields()!;
-            var playerId = fields[0];
-            var points = int.Parse(fields[8]);
+            var fields = reader.ReadFields()!; 
+            var playerId = fields[0]; // Player ID está en la columna 0
+            var points = int.Parse(fields[8]); // Points está en la columna 8 y lo convertimos a entero
+            
+            if (players.ContainsKey(playerId)) //Si el jugador ya está en el diccionario
+                players[playerId] += points; //sumamos los puntos a los puntos existentes
+            else
+                players[playerId] = points; //Si no está, lo agregamos con sus puntos iniciales
         }
 
         Console.WriteLine($"Players: {{{string.Join(", ", players)}}}");

@@ -24,7 +24,19 @@
 
     private static int CountDuplicates(int[] data)
     {
-        // Add code here.
-        return 0;
+        HashSet<int> vistos = new HashSet<int>(); // Creo una "bolsa magica" llamada vistos, Para numeros ya vistos
+        HashSet<int> duplicados = new HashSet<int>(); //Creo otra "bolsa magica" donde GUARDARE los numeros duplicados
+
+        foreach (int num in data) //Miro cada num uno x uno 
+        {
+            if (!vistos.Add(num))//“Si el número NO se pudo agregar porque ya existía…”
+            //Add(numero) devuelve:
+                //true → si el número NO estaba
+                //false → si el número YA estaba
+            {
+                duplicados.Add(num);
+            }
+    }
+        return duplicados.Count;
     }
 }

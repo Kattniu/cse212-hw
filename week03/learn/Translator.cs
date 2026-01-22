@@ -24,7 +24,8 @@ public class Translator
     /// <returns>fixed array of divisors</returns>
     public void AddWord(string fromWord, string toWord)
     {
-        // ADD YOUR CODE HERE
+     // Guardamos la palabra original como LLAVE y la traducción como VALOR
+        _words[fromWord] = toWord;   
     }
 
     /// <summary>
@@ -34,7 +35,14 @@ public class Translator
     /// <returns>The translated word or "???" if no translation is available</returns>
     public string Translate(string fromWord)
     {
-        // ADD YOUR CODE HERE
-        return "";
+        // 1. Verificamos si la palabra existe en nuestro diccionario (MEMBER)
+        if (_words.ContainsKey(fromWord))
+        {
+            // 2. Si existe, la devolvemos (GET)
+            return _words[fromWord];
+        }
+
+        // 3. Si no existe, devolvemos los signos de interrogación
+        return "???";
     }
 }

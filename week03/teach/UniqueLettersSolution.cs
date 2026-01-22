@@ -22,17 +22,17 @@
      */
     private static bool AreUniqueLetters(string text)
     {
-        var found = new HashSet<char>();
-        foreach (var letter in text)
+        var found = new HashSet<char>(); //Aqui iniciamos un conjunto vacio para guardar las letras encontradas
+        foreach (var letter in text) // Recorremos cada letra en el texto proporcionado solo una vez
         {
             // Look in set to see if letter was seen before
-            if (found.Contains(letter))
-                return false;
+            if (found.Contains(letter)) // Si la letra ya esta en el conjunto, significa que es un duplicado
+                return false; // We found a duplicate letter, so return false
             // Otherwise we will add it to the set and move on
-            found.Add(letter);
+            found.Add(letter); // Agregamos la letra al conjunto de letras encontradas
         }
 
-        return true;
+        return true; // Si terminamos de recorrer el texto sin encontrar duplicados, todas las letras son unicas
     }
 
     /**
