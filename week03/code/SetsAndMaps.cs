@@ -21,8 +21,28 @@ public static class SetsAndMaps
     /// <param name="words">An array of 2-character words (lowercase, no duplicates)</param>
     public static string[] FindPairs(string[] words)
     {
-        // TODO Problem 1 - ADD YOUR CODE HERE
-        return [];
+        //Este HashSet nos ayuda a almacenar las palabras que ya hemos visto
+        var vistos = new HashSet<string>();
+        //Esta lista nos ayuda a almacenar los resultados que vamos a devolver
+        var resultados = new List<string>();
+        //Iteramos a través de cada palabra en el arreglo de palabras
+        foreach (var palabra in words) {
+            //Si las dos letras de la palabra son iguales, continuamos con la siguiente iteración
+            if (palabra[0] == palabra[1])
+            continue;
+            //Creamos la palabra reversa invirtiendo las letras de la palabra actual
+            string reversa = "" + palabra[1] + palabra[0];
+            //Verificamos si la palabra reversa ya ha sido vista
+            if (vistos.Contains(reversa)) {
+                //Si es así, agregamos el par simétrico a los resultados
+                resultados.Add($"{reversa} & {palabra}");
+            // Si no ha sido vista, agregamos la palabra actual al conjunto de vistos
+            } else {
+                vistos.Add(palabra);//guardo la palabra actual en el conjunto de vistos
+            }
+    }
+    //Convertimos la lista de resultados a un arreglo y lo devolvemos
+    return resultados.ToArray();
     }
 
     /// <summary>
@@ -38,13 +58,29 @@ public static class SetsAndMaps
     /// <returns>fixed array of divisors</returns>
     public static Dictionary<string, int> SummarizeDegrees(string filename)
     {
+        // 1. Creamos el diccionario vacío. 
+        // La llave es string (nombre del título) y el valor es int (el contador).
         var degrees = new Dictionary<string, int>();
+        // 2. Leemos el archivo línea por línea.
         foreach (var line in File.ReadLines(filename))
         {
+            // 3. Cortamos la línea en cada coma para separar las columnas
             var fields = line.Split(",");
-            // TODO Problem 2 - ADD YOUR CODE HERE
-        }
+            // 4. El problema dice que el título está en la columna 4.
+            // En programación, empezamos a contar desde 0, así que la col 4 es el índice [3].
+            string degree = fields[3].Trim(); // Trim() quita espacios extra por si acaso
 
+            // 5. Lógica del contador:
+            if (degrees.ContainsKey(degree)) {
+                //antes de sumar, preguntamos si la llave de ese titulo ya existe en el diccionario
+                // Si ya existe el título en el diccionario, le sumamos 1 al número que ya tenía
+                degrees[degree] = degrees[degree] + 1; // o degrees[degree] ++;
+            } else {
+                // Si es la primera vez que vemos este título, lo agregamos con el valor 1
+                degrees[degree] = 1;
+            }
+        }
+        // 6. Devolvemos el diccionario lleno con todos los conteos
         return degrees;
     }
 
