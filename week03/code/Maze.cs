@@ -31,17 +31,31 @@ public class Maze
     /// can't move, throw an InvalidOperationException with the message "Can't go that way!".
     /// </summary>
     public void MoveLeft()
-    {
-        // FILL IN CODE
+    {   //el indice 0 es left, moverse a la izquierda resta 1 a la x
+        if(_mazeMap[(_currX, _currY)][0]) //left
+        {
+            _currX--; //mover a la izquierda
+        }
+        else
+        {   //si no se puede mover a la izquierda
+            throw new InvalidOperationException("Can't go that way!");
+        }
     }
 
     /// <summary>
     /// Check to see if you can move right.  If you can, then move.  If you
     /// can't move, throw an InvalidOperationException with the message "Can't go that way!".
     /// </summary>
-    public void MoveRight()
+    public void MoveRight() //el indice 1 es right, moverse a la derecha suma 1 a la x
     {
-        // FILL IN CODE
+        if (_mazeMap[(_currX, _currY)][1]) //right
+        {
+            _currX++; //mover a la derecha
+        }
+        else
+        {   //si no se puede mover a la derecha
+            throw new InvalidOperationException("Can't go that way!");
+        }
     }
 
     /// <summary>
@@ -50,16 +64,32 @@ public class Maze
     /// </summary>
     public void MoveUp()
     {
-        // FILL IN CODE
+        //el indice 2 es up, moverse hacia arriba resta 1 a la y
+        if (_mazeMap[(_currX, _currY)][2]) //up
+        {
+            _currY--; //mover hacia arriba
+        }
+        else
+        {   //si no se puede mover hacia arriba
+            throw new InvalidOperationException("Can't go that way!");
+        }
     }
 
     /// <summary>
     /// Check to see if you can move down.  If you can, then move.  If you
     /// can't move, throw an InvalidOperationException with the message "Can't go that way!".
     /// </summary>
-    public void MoveDown()
+    public void MoveDown() //el indice 1 es right, moverse a la derecha suma 1 a la x
     {
-        // FILL IN CODE
+        //el indice 3 es down, moverse hacia abajo suma 1 a la y
+        if (_mazeMap[(_currX, _currY)][3]) //down
+        {
+            _currY++; //mover hacia abajo
+        }
+        else
+        {   //si no se puede mover hacia abajo
+            throw new InvalidOperationException("Can't go that way!");
+        }
     }
 
     public string GetStatus()

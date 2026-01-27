@@ -56,7 +56,8 @@ public static class SetsAndMaps
     /// </summary>
     /// <param name="filename">The name of the file to read</param>
     /// <returns>fixed array of divisors</returns>
-    public static Dictionary<string, int> SummarizeDegrees(string filename)
+    public static Dictionary<string, int> SummarizeDegrees(string filename) 
+    //filemane es un parametro, eso significa que el nombre del archivo(census.txt) se pasa desde afuera 
     {
         // 1. Creamos el diccionario vacío. 
         // La llave es string (nombre del título) y el valor es int (el contador).
@@ -102,8 +103,38 @@ public static class SetsAndMaps
     /// </summary>
     public static bool IsAnagram(string word1, string word2)
     {
-        // TODO Problem 3 - ADD YOUR CODE HERE
-        return false;
+        // 1. Quitar espacios y convertir a minúsculas para que "Ab" y "b A" coincidan
+        string cleanWord1 = word1.Replace(" ", "").ToLower();
+        string cleanWord2 = word2.Replace(" ", "").ToLower();
+
+        // 2. Si después de limpiar no tienen el mismo tamaño, no son anagramas
+        if (cleanWord1.Length != cleanWord2.Length)
+            return false;
+
+        // 3. Usamos un diccionario para contar las letras de la primera palabra
+        var counts = new Dictionary<char, int>();
+        foreach (char c in cleanWord1)
+        {
+            if (counts.ContainsKey(c))
+                counts[c]++;
+            else
+                counts[c] = 1;
+        }
+        // 4. Restamos las letras usando la segunda palabra
+        foreach (char c in cleanWord2)
+        {
+            // Si la letra ni siquiera estaba en la primera palabra...
+            if (!counts.ContainsKey(c))
+                return false;
+
+            counts[c]--; // Restamos 1 a la cuenta de esa letra 
+            // Si restamos y el valor es menor a 0, significa que word2 tiene más de esa letra
+            if (counts[c] < 0)
+                return false;
+        }
+
+        // 5. Si logramos pasar todos los filtros, ¡es un anagrama!
+        return true;
     }
 
     /// <summary>
@@ -128,15 +159,29 @@ public static class SetsAndMaps
         using var jsonStream = client.Send(getRequestMessage).Content.ReadAsStream();
         using var reader = new StreamReader(jsonStream);
         var json = reader.ReadToEnd();
+
         var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
-
+    //esta linea convierte el texto json en un objeto de C# usando las clases que definimos en FeatureCollection.cs
         var featureCollection = JsonSerializer.Deserialize<FeatureCollection>(json, options);
+        //1 creo una lista de strings para guardar los mensajes formateados 
+        
+        var summaries = new List<string>();
+        //2 verifico que featureCollection y su propiedad Features no sean nulos
+        if (featureCollection?.Features != null)
+        {
+            // 3. Recorremos cada "Feature" (cada terremoto individual) que viene en la lista.
+        foreach (var quake in featureCollection.Features)
+        {
+            // 4. Extraemos el lugar (place) y la magnitud (mag) desde el objeto Properties.
+            string lugar = quake.Properties.Place;
+            double magnitud = quake.Properties.Mag;
 
-        // TODO Problem 5:
-        // 1. Add code in FeatureCollection.cs to describe the JSON using classes and properties 
-        // on those classes so that the call to Deserialize above works properly.
-        // 2. Add code below to create a string out each place a earthquake has happened today and its magitude.
-        // 3. Return an array of these string descriptions.
-        return [];
+            // 5. Creamos el formato de texto: "Lugar - Mag Numero" y lo añadimos a nuestra lista.
+            summaries.Add($"{lugar} - Mag {magnitud}");
+        }
     }
+
+    // 6. Convertimos la lista (List) a un arreglo (Array) porque es lo que la función debe devolver.
+    return summaries.ToArray();
+}
 }
