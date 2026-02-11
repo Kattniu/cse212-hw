@@ -14,9 +14,22 @@ public static class Recursion
     /// </summary>
     public static int SumSquaresRecursive(int n)
     {
-        // TODO Start Problem 1
-        return 0;
-    }
+        //1  base case (detiene la ejecucion para que no sea infinita)
+        if (n <= 0)
+            return 0;
+        //2 recursive case (recursividad: hacer mas pequeño el problema)
+        return n * n + SumSquaresRecursive(n - 1);
+     //imaginate que n es 5, entonces seria  5x5+sumSquaresRecursive(4)
+    //llamada1 :(n=5 osea 5x5)=25, guarda el 25 y llama a sumSquaresRecursive(4)osea espera el resultado de n=4
+    //llamada2 :(n=4)=16, guarda el 16 y llama a sumSquaresRecursive(3)osea espera el resultado de n=3
+    //llamada3 :(n=3)=9, guarda el 9 y llama a sumSquaresRecursive(2)osea espera el resultado de n=2
+    //llamada4 :(n=2)=4, guarda el 4 y llama a sumSquaresRecursive(1)osea espera el resultado de n=1
+    //llamada5 :(n=1)=1, guarda el 1 y llama a sumSquaresRecursive(0)osea espera el resultado de n=0
+    //llamada6 :(n=0)=0, guarda el 0 y como es el caso base, regresa 0 a la llamada5
+    //Los resultado rebotas hacia arriba, (a)n=1 recibe el 0 y dice: 1+0 =1, 
+    //(b)n=2 recibe el 1 y dice:4+1=5, (c)n=3 recibe el 5 y dice:9+5=14, (d)n=4 recibe el 14 y dice:16+14=30, (e)n=5 recibe el 30 y dice:25+30=55, entonces el resultado final es 55
+    } 
+
 
     /// <summary>
     /// #############
@@ -39,7 +52,29 @@ public static class Recursion
     /// </summary>
     public static void PermutationsChoose(List<string> results, string letters, int size, string word = "")
     {
-        // TODO Start Problem 2
+        // 1. Caso Base: Si el tamaño es 0, significa que la palabra está completa
+    if (size == 0)
+    {
+        results.Add(word); // Guardamos la palabra armada en la lista de resultados
+        return;
+    }
+
+    // 2. Caso Recursivo: Probar cada letra disponible
+    for (int i = 0; i < letters.Length; i++)
+    {
+        // Elegimos la letra actual
+        string charSelected = letters[i].ToString();
+
+        // Creamos un nuevo string con las letras que quedan (quitando la que elegimos)
+        // Usamos [..i] para lo que está antes y [i+1..] para lo que está después
+        string remainingLetters = letters[..i] + letters[(i + 1)..];
+
+        // Llamada recursiva:
+        // - Pasamos las letras que sobran
+        // - Restamos 1 al tamaño que falta llenar (size - 1)
+        // - Le pegamos la letra elegida a la palabra que estamos armando
+        PermutationsChoose(results, remainingLetters, size - 1, word + charSelected);
+    }
     }
 
     /// <summary>
@@ -86,6 +121,10 @@ public static class Recursion
     /// </summary>
     public static decimal CountWaysToClimb(int s, Dictionary<int, decimal>? remember = null)
     {
+        //1 inicializar el dicc si es la primera vez que se llama a la funcion
+        if (remember == null)
+            remember = new Dictionary<int, decimal>();  
+
         // Base Cases
         if (s == 0)
             return 0;
@@ -95,11 +134,14 @@ public static class Recursion
             return 2;
         if (s == 3)
             return 4;
-
-        // TODO Start Problem 3
+        
+        // 2. Revisar la libreta (Check memo)
+        if (remember.ContainsKey(s))
+        return remember[s];
 
         // Solve using recursion
-        decimal ways = CountWaysToClimb(s - 1) + CountWaysToClimb(s - 2) + CountWaysToClimb(s - 3);
+        decimal ways = CountWaysToClimb(s - 1, remember) + CountWaysToClimb(s - 2, remember) + CountWaysToClimb(s - 3, remember);
+        remember[s] = ways; // Guardar el resultado en la libreta (memo)
         return ways;
     }
 
@@ -118,7 +160,19 @@ public static class Recursion
     /// </summary>
     public static void WildcardBinary(string pattern, List<string> results)
     {
-        // TODO Start Problem 4
+        //buscar la priemra estrella
+        int index = pattern.IndexOf('*');
+        //2- caso base: si no hay estrellas, entonces el patron es un string binario completo
+        if (index == -1)        {
+            results.Add(pattern); // Guardamos el patrón completo en la lista de resultados
+            return;
+        }   
+        //3- paso recursivo
+        //creo dos nuevas versiones reemplazando la estrella en index 
+        string patternWithZero = pattern[..index] + '0' + pattern[(index + 1)..];
+        string patternWithOne = pattern[..index] + '1' + pattern[(index + 1)..];
+        WildcardBinary(patternWithZero, results);
+        WildcardBinary(patternWithOne, results);        
     }
 
     /// <summary>
@@ -135,8 +189,30 @@ public static class Recursion
         
         // currPath.Add((1,2)); // Use this syntax to add to the current path
 
-        // TODO Start Problem 5
-        // ADD CODE HERE
+        //1- Anadir la posicion actual a la ruta actual (currPath)
+        currPath.Add((x,y));
+        //2- Revisar si la posicion actual es el final, si es asi, anadir la ruta a los resultados
+        if (maze.IsEnd(x, y))
+        {
+            results.Add(currPath.AsString());
+        }
+        else
+        {
+        // 3- Si no es el final, revisar las posiciones adyacentes
+            if (maze.IsValidMove(currPath, x + 1, y)) // Derecha
+                SolveMaze(results, maze, x + 1, y, currPath);
+
+            if (maze.IsValidMove(currPath, x - 1, y)) // Izquierda
+                SolveMaze(results, maze, x - 1, y, currPath);
+
+            if (maze.IsValidMove(currPath, x, y + 1)) // Abajo
+                SolveMaze(results, maze, x, y + 1, currPath);
+
+            if (maze.IsValidMove(currPath, x, y - 1)) // Arriba
+                SolveMaze(results, maze, x, y - 1, currPath);
+        }
+        //4- Antes de regresar de la funcion, remover la posicion actual de la ruta actual (backtracking)
+        currPath.RemoveAt(currPath.Count - 1);
 
         // results.Add(currPath.AsString()); // Use this to add your path to the results array keeping track of complete maze solutions when you find the solution.
     }
